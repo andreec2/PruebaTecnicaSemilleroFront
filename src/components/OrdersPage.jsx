@@ -45,26 +45,40 @@ const OrdersPage = () => {
   if (orders.length === 0) return <p>No tienes pedidos realizados aún.</p>;
 
  return (
-  <div className="orders-container">
-    <h2>📦 Historial de pedidos</h2>
-    <ul className="orders-list">
-      {orders.map((order, idx) => (
-        <li className="order-item" key={idx}>
-          <div className="order-header">
-            Pedido #{order.id} - {order.items.length} producto(s)
-          </div>
-          <ul className="order-sublist">
-            {order.items.map((item, i) => (
-              <li key={i}>
-                {item.nombre} x {item.cantidad} = ${item.precioUnitario.toFixed(2)} c/u
-              </li>
-            ))}
-          </ul>
-          <div className="order-total">Total: ${order.total?.toFixed(2) ?? "?"}</div>
-        </li>
-      ))}
-    </ul>
-  </div>
+      <div className="orders-container">
+        <h2>📦 Historial de pedidos</h2>
+        <ul className="orders-list">
+          {orders.map((order, idx) => (
+            <li className="order-item" key={idx}>
+              <div className="order-header">Pedido #{order.id}</div>
+
+              <table className="order-table">
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio unitario</th>
+                    <th>Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {order.items.map((item, i) => (
+                    <tr key={i}>
+                      <td>{item.nombre}</td>
+                      <td>{item.cantidad}</td>
+                      <td>${item.precioUnitario.toFixed(2)}</td>
+                      <td>${(item.precioUnitario * item.cantidad).toFixed(2)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              <div className="order-total">Total: ${order.total?.toFixed(2) ?? "?"}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
 );
 };
 

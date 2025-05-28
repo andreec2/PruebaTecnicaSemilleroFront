@@ -2,9 +2,14 @@
   background-color: #1C1C1E;
   color: #F2F2F7;
   min-height: 100vh;
-  padding: 40px;
+  width: 100vw; /* Asegura uso total del ancho */
+  padding: 40px 20px;
   font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
+
 
 .orders-container h2 {
   font-size: 28px;
@@ -54,3 +59,27 @@
   font-size: 18px;
   color: #8E8E93;
 }
+
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.order-table th,
+.order-table td {
+  border: 1px solid #3A3A3C;
+  padding: 10px;
+  text-align: left;
+}
+
+.order-table th {
+  background-color: #3A3A3C;
+  color: #F2F2F7;
+  font-weight: bold;
+}
+
+.order-table td {
+  color: #E5E5EA;
+}
+

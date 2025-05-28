@@ -2,13 +2,23 @@
   background-color: #1C1C1E;
   color: #F2F2F7;
   min-height: 100vh;
-  padding: 40px;
+  width: 100vw;
   font-family: Arial, sans-serif;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 .cart-container h2 {
   font-size: 28px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+}
+
+.cart-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 5px;
 }
 
 .cart-list {
@@ -46,9 +56,9 @@
 }
 
 .cart-actions {
-  margin-top: 30px;
   display: flex;
   gap: 15px;
+  margin-top: 20px;
 }
 
 .cart-actions button {
@@ -74,14 +84,4 @@
 
 .cart-actions .pay-btn:hover {
   background-color: #30D158;
-}
-
-.cart-error {
-  color: #FF453A;
-  margin-top: 20px;
-}
-
-.cart-empty {
-  font-size: 18px;
-  color: #8E8E93;
 }
