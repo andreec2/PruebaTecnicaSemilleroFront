@@ -115,3 +115,10 @@ html, body {
   color: #FF453A;
   margin: 20px 0;
 }
+
+.product-image {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
