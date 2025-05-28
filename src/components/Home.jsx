@@ -3,20 +3,20 @@ import { useNavigate } from "react-router-dom";
 import "../styles/home.css";
 
 // Imágenes
-import blusa from "../assets/blusa.png";
-import bufanda from "../assets/bufanda.png";
-import camiseta from "../assets/camisa.png";
-import chaqueta from "../assets/chaqueta.png";
-import falda from "../assets/falda.png";
-import gorra from "../assets/gorra.png";
+import blusa from "../assets/blusa-removebg-preview.png";
+import bufanda from "../assets/bufanda-removebg-preview.png";
+import camiseta from "../assets/camisa-removebg-preview.png";
+import chaqueta from "../assets/chaqueta-removebg-preview.png";
+import falda from "../assets/falda-removebg-preview.png";
+import gorra from "../assets/gorra-removebg-preview.png";
 import login from "../assets/login.png";
-import medias from "../assets/medias.png";
-import pantalon from "../assets/pantalon.png";
-import short from "../assets/short.png";
+import medias from "../assets/medias-removebg-preview.png";
+import pantalon from "../assets/pantalon-removebg-preview.png";
+import short from "../assets/short-removebg-preview.png";
 import singup from "../assets/singup.jpeg";
 import sudadera from "../assets/sudadera.png";
-import vestido from "../assets/vestido.png";
-import zapatos from "../assets/zapatos.png";
+import vestido from "../assets/vestido-removebg-preview.png";
+import zapatos from "../assets/zapatos-removebg-preview.png";
 import aaaa from "../assets/aaaa.png";
 
 const Home = () => {
@@ -140,11 +140,13 @@ const Home = () => {
       <div className="product-list">
         {productos.map((producto) => (
           <div className="product-card" key={producto.id}>
-            <img
-              src={obtenerImagen(producto.nombre)}
-              alt={producto.nombre}
-              className="product-image"
-            />
+              <div className="product-image-container">
+                <img
+                  src={obtenerImagen(producto.nombre)}
+                  alt={producto.nombre}
+                  className="product-image"
+                />
+              </div>
             <h3>{producto.nombre}</h3>
             <p>${producto.precio.toFixed(2)}</p>
             <div className="quantity-controls">

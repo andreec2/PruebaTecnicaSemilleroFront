@@ -7,6 +7,13 @@ const CartPage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [mostrarFormularioPago, setMostrarFormularioPago] = useState(false);
+  const [formularioPago, setFormularioPago] = useState({
+  direccion: "",
+  ciudad: "",
+  telefono: "",
+  tarjeta: "",
+  });
 
   const fetchCarrito = async () => {
     setLoading(true);
@@ -84,29 +91,41 @@ const CartPage = () => {
     }
   };
 
-  const pagar = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const email = localStorage.getItem("email");
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormularioPago({ ...formularioPago, [name]: value });
+  };
 
-      if (!token || !email) throw new Error("No autenticado");
+  const handleSubmitPago = async () => {
+    const { direccion, ciudad, telefono, tarjeta } = formularioPago;
 
-      const res = await fetch(`http://localhost:8080/api/cart/${email}/checkout`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  if (!direccion || !ciudad || !telefono || !tarjeta) {
+    alert("Por favor completa todos los campos.");
+    return;
+  }
 
-      const text = await res.text();
+  try {
+    const token = localStorage.getItem("token");
+    const email = localStorage.getItem("email");
 
-      if (!res.ok) throw new Error(text);
+    if (!token || !email) throw new Error("No autenticado");
 
-      alert("✅ " + text);
-      navigate("/home");
-    } catch (err) {
-      alert("❌ " + err.message);
-    }
+    const res = await fetch(`http://localhost:8080/api/cart/${email}/checkout`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const text = await res.text();
+
+    if (!res.ok) throw new Error(text);
+
+    alert("✅ " + text);
+    navigate("/home");
+  } catch (err) {
+    alert("❌ " + err.message);
+  }
   };
 
   useEffect(() => {
@@ -126,7 +145,7 @@ const CartPage = () => {
 
   return (
     <div className="cart-container">
-      <button className="home-btn" onClick={() => navigate("/home")}>🏠 Volver al inicio</button>
+      <button className="home-btn" onClick={() => navigate("/home")}> Volver al inicio</button>
       <h2>🛒 Carrito de compras</h2>
 
       <div className="cart-content">
@@ -144,9 +163,51 @@ const CartPage = () => {
 
       <div className="cart-actions">
         <button className="clear-btn" onClick={vaciarCarrito}>🧹 Vaciar carrito</button>
-        <button className="pay-btn" onClick={pagar}>💳 Pagar ahora</button>
+        <button className="pay-btn" onClick={() => setMostrarFormularioPago(true)}>💳 Pagar ahora</button>
       </div>
+
+      {mostrarFormularioPago && (
+      <div className="payment-overlay">
+        <div className="payment-form">
+          <h3>Pasarela de Pago</h3>
+          <input
+            type="text"
+            name="direccion"
+            placeholder="Dirección"
+            value={formularioPago.direccion}
+            onChange={handleInputChange}
+          />
+          <input
+            type="text"
+            name="ciudad"
+            placeholder="Ciudad"
+            value={formularioPago.ciudad}
+            onChange={handleInputChange}
+          />
+          <input
+            type="text"
+            name="telefono"
+            placeholder="Teléfono"
+            value={formularioPago.telefono}
+            onChange={handleInputChange}
+          />
+          <input
+            type="text"
+            name="tarjeta"
+            placeholder="Número de Tarjeta"
+            value={formularioPago.tarjeta}
+            onChange={handleInputChange}
+          />
+          <div className="payment-buttons">
+            <button onClick={handleSubmitPago}>💳 Confirmar Pago</button>
+            <button onClick={() => setMostrarFormularioPago(false)}>❌ Cancelar</button>
+          </div>
+        </div>
+      </div>
+    )}
     </div>
+
+    
   );
 };
 

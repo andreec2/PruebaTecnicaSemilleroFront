@@ -85,3 +85,59 @@
 .cart-actions .pay-btn:hover {
   background-color: #30D158;
 }
+
+.payment-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(28, 28, 30, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.payment-form {
+  background-color: #2C2C2E;
+  padding: 30px;
+  border-radius: 12px;
+  width: 300px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.payment-form input {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  font-size: 14px;
+}
+
+.payment-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.payment-buttons button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.payment-buttons button:first-child {
+  background-color: #30D158;
+  color: white;
+}
+
+.payment-buttons button:last-child {
+  background-color: #FF453A;
+  color: white;
+}

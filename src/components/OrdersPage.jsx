@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../Styles/orders.css";
 
 
@@ -6,6 +7,7 @@ const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -46,6 +48,7 @@ const OrdersPage = () => {
 
  return (
       <div className="orders-container">
+        <button className="home-btn" onClick={() => navigate("/home")}> Volver al inicio</button>
         <h2>📦 Historial de pedidos</h2>
         <ul className="orders-list">
           {orders.map((order, idx) => (
