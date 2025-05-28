@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../styles/home.css";
 
 const Home = () => {
   const [productos, setProductos] = useState([]);
@@ -32,7 +33,6 @@ const Home = () => {
       const data = await response.json();
       setProductos(data);
 
-      // Inicializar cantidades en 1 para cada producto
       const cantidadesIniciales = {};
       data.forEach((prod) => {
         cantidadesIniciales[prod.id] = 1;
@@ -87,39 +87,41 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <div className="home-container">
       <h2>Bienvenido a la tienda</h2>
 
       {loading && <p>Cargando productos...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="error-text">{error}</p>}
       {!loading && !error && productos.length === 0 && <p>No hay productos.</p>}
 
-      <ul>
+      <div className="product-list">
         {productos.map((producto) => (
-          <li key={producto.id} style={{ marginBottom: "15px" }}>
-            <strong>{producto.nombre}</strong> - ${producto.precio.toFixed(2)}
-            <div>
+          <div className="product-card" key={producto.id}>
+            <h3>{producto.nombre}</h3>
+            <p>${producto.precio.toFixed(2)}</p>
+            <div className="quantity-controls">
               <button onClick={() => cambiarCantidad(producto.id, -1)}>-</button>
-              <span style={{ margin: "0 10px" }}>{cantidades[producto.id] || 1}</span>
+              <span>{cantidades[producto.id] || 1}</span>
               <button onClick={() => cambiarCantidad(producto.id, 1)}>+</button>
             </div>
             <button onClick={() => agregarAlCarrito(producto)}>Agregar al carrito</button>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
 
-      <hr />
-      <button onClick={() => navigate("/cart")}>🛒 Ver carrito</button>
-      <button onClick={() => navigate("/orders")}>📜 Ver mis pedidos</button>
-      <button
-        onClick={() => {
-          localStorage.removeItem("token");
-          localStorage.removeItem("email");
-          window.location.reload();
-        }}
-      >
-        🔐 Cerrar sesión
-      </button>
+      <div className="home-actions">
+        <button onClick={() => navigate("/cart")}>Ver carrito</button>
+        <button onClick={() => navigate("/orders")}>Ver mis pedidos</button>
+        <button
+          onClick={() => {
+            localStorage.removeItem("token");
+            localStorage.removeItem("email");
+            window.location.reload();
+          }}
+        >
+          Cerrar sesión
+        </button>
+      </div>
     </div>
   );
 };

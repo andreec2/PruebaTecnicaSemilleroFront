@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import "../Styles/orders.css";
+
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -42,26 +44,28 @@ const OrdersPage = () => {
   if (error) return <p style={{ color: "red" }}>{error}</p>;
   if (orders.length === 0) return <p>No tienes pedidos realizados aún.</p>;
 
-  return (
-    <div>
-      <h2>📦 Historial de pedidos</h2>
-      <ul>
-        {orders.map((order, idx) => (
-          <li key={idx}>
-            <strong>Pedido #{order.id}</strong> - {order.items.length} producto(s) - Total: $
-            {order.total?.toFixed(2) ?? "?"}
-            <ul>
-              {order.items.map((item, i) => (
-                <li key={i}>
-                  {item.nombre} x {item.cantidad} = ${item.precioUnitario.toFixed(2)} c/u
-                </li>
-              ))}
-            </ul>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+ return (
+  <div className="orders-container">
+    <h2>📦 Historial de pedidos</h2>
+    <ul className="orders-list">
+      {orders.map((order, idx) => (
+        <li className="order-item" key={idx}>
+          <div className="order-header">
+            Pedido #{order.id} - {order.items.length} producto(s)
+          </div>
+          <ul className="order-sublist">
+            {order.items.map((item, i) => (
+              <li key={i}>
+                {item.nombre} x {item.cantidad} = ${item.precioUnitario.toFixed(2)} c/u
+              </li>
+            ))}
+          </ul>
+          <div className="order-total">Total: ${order.total?.toFixed(2) ?? "?"}</div>
+        </li>
+      ))}
+    </ul>
+  </div>
+);
 };
 
 export default OrdersPage;

@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import "../Styles/cart.css";
+
 
 const CartPage = () => {
   const [carrito, setCarrito] = useState(null);
@@ -117,62 +119,25 @@ const CartPage = () => {
     return <p>El carrito está vacío.</p>;
 
   return (
-    <div>
-      <h2>🛒 Carrito de compras</h2>
-      <ul>
-        {carrito.items.map((item, idx) => (
-          <li key={idx}>
-            {item.nombre} - {item.cantidad} unidad(es) - ${item.precioUnitario.toFixed(2)} c/u
-            <button
-              onClick={() => eliminarProducto(item.productId)}
-              style={{
-                marginLeft: "10px",
-                backgroundColor: "#dc3545",
-                color: "#fff",
-                border: "none",
-                padding: "5px 10px",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
-            >
-              🗑 Eliminar
-            </button>
-          </li>
-        ))}
-      </ul>
+    <div className="cart-container">
+  <h2>🛒 Carrito de compras</h2>
 
-      <button
-        onClick={vaciarCarrito}
-        style={{
-          marginTop: "20px",
-          backgroundColor: "#dc3545",
-          color: "#fff",
-          padding: "10px 15px",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
-      >
-        🧹 Vaciar carrito
-      </button>
+  <ul className="cart-list">
+    {carrito.items.map((item, idx) => (
+      <li className="cart-item" key={idx}>
+        <span>
+          {item.nombre} - {item.cantidad} unidad(es) - ${item.precioUnitario.toFixed(2)} c/u
+        </span>
+        <button onClick={() => eliminarProducto(item.productId)}>🗑 Eliminar</button>
+      </li>
+    ))}
+  </ul>
 
-      <button
-            onClick={pagar}
-            style={{
-              marginTop: "10px",
-              backgroundColor: "#28a745",
-              color: "#fff",
-              padding: "10px 15px",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-              marginLeft: "10px"
-            }}
-          >
-            💳 Pagar ahora
-    </button>
-
-    </div>
+  <div className="cart-actions">
+    <button className="clear-btn" onClick={vaciarCarrito}>🧹 Vaciar carrito</button>
+    <button className="pay-btn" onClick={pagar}>💳 Pagar ahora</button>
+  </div>
+</div>
   );
 };
 

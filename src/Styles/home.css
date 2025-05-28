@@ -1,0 +1,103 @@
+.home-container {
+  padding: 40px;
+  font-family: Arial, sans-serif;
+  background-color: #1C1C1E;
+  color: #F2F2F7;
+  min-height: 100vh;
+}
+
+.home-container h2 {
+  font-size: 28px;
+  margin-bottom: 30px;
+}
+
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.product-card {
+  background-color: #2C2C2E;
+  border-radius: 10px;
+  padding: 20px;
+  width: 220px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.product-card h3 {
+  margin: 0 0 10px;
+  font-size: 20px;
+}
+
+.product-card p {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #FFD60A;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 15px 0;
+}
+
+.quantity-controls button {
+  background-color: #007AFF;
+  color: white;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.quantity-controls button:hover {
+  background-color: #5AC8FA;
+}
+
+.product-card button {
+  background-color: #34C759;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.product-card button:hover {
+  background-color: #30D158;
+}
+
+.home-actions {
+  margin-top: 40px;
+  display: flex;
+  gap: 15px;
+}
+
+.home-actions button {
+  background-color: #007AFF;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.home-actions button:hover {
+  background-color: #5AC8FA;
+}
+
+.error-text {
+  color: #FF453A;
+  margin: 20px 0;
+}
