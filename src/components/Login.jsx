@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ username: "", password: "" });
@@ -24,6 +26,9 @@ const Login = () => {
 
       if (response.ok) {
         localStorage.setItem("token", data.token);
+        const token = data.token;
+        const decoded = jwtDecode(token);
+        localStorage.setItem("email", decoded.sub); // o el campo que incluya el email
         navigate("/home"); // redirige a una vista protegida
       } else {
         setError(data.message || "Error al iniciar sesión.");

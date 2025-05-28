@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [productos, setProductos] = useState([]);
+  const [cantidades, setCantidades] = useState({});
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [debug, setDebug] = useState(null);
+  const navigate = useNavigate();
 
-  const cargarProductos = async (usarToken = true) => {
+  const cargarProductos = async () => {
     setLoading(true);
     setError("");
     try {
       const token = localStorage.getItem("token");
       const headers = {
         "Content-Type": "application/json",
-        ...(usarToken && token && { Authorization: `Bearer ${token}` }),
+        ...(token && { Authorization: `Bearer ${token}` }),
       };
 
       const response = await fetch("http://localhost:8080/api/products", {
@@ -22,25 +24,21 @@ const Home = () => {
         mode: "cors",
       });
 
-      const status = response.status;
-      const responseOk = response.ok;
-
-      if (!responseOk) {
+      if (!response.ok) {
         const text = await response.text();
-        throw new Error(`Error ${status}: ${text || response.statusText}`);
+        throw new Error(`Error ${response.status}: ${text || response.statusText}`);
       }
 
       const data = await response.json();
       setProductos(data);
 
-      // Info de debug opcional
-      setDebug({
-        tokenExists: Boolean(token),
-        tokenPreview: token ? token.slice(0, 20) + "..." : "No hay token",
-        headers,
-        status,
-        responseOk,
+      // Inicializar cantidades en 1 para todos los productos
+      const cantidadesIniciales = {};
+      data.forEach((p) => {
+        cantidadesIniciales[p.id] = 1;
       });
+      setCantidades(cantidadesIniciales);
+
     } catch (err) {
       setError(err.message);
     } finally {
@@ -49,53 +47,86 @@ const Home = () => {
   };
 
   useEffect(() => {
-    cargarProductos(true); // true = usar token
+    cargarProductos();
   }, []);
+
+  const cambiarCantidad = (id, operacion) => {
+    setCantidades((prev) => {
+      const actual = prev[id] || 1;
+      const nuevaCantidad = operacion === "incrementar" ? actual + 1 : Math.max(1, actual - 1);
+      return {
+        ...prev,
+        [id]: nuevaCantidad,
+      };
+    });
+  };
+
+  const agregarAlCarrito = async (producto) => {
+    try {
+      const token = localStorage.getItem("token");
+      const email = localStorage.getItem("email");
+
+      if (!token || !email) throw new Error("Usuario no autenticado");
+
+      const cantidad = cantidades[producto.id] || 1;
+
+      const response = await fetch(`http://localhost:8080/api/cart/${email}/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          productId: producto.id,
+          cantidad,
+        }),
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`Error al agregar al carrito: ${text}`);
+      }
+
+      alert("Producto agregado al carrito");
+    } catch (err) {
+      alert(err.message);
+    }
+  };
 
   return (
     <div>
-      <h2>Bienvenido a la tienda</h2>
+      <h2>Tienda</h2>
 
       {loading && <p>Cargando productos...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p>{error}</p>}
       {!loading && !error && productos.length === 0 && <p>No hay productos.</p>}
 
       <ul>
         {productos.map((producto) => (
-            <li key={producto.id}>
+          <li key={producto.id}>
             {producto.nombre} - ${producto.precio}
-            </li>
+            <div style={{ display: "inline-flex", alignItems: "center", marginLeft: 10 }}>
+              <button onClick={() => cambiarCantidad(producto.id, "disminuir")}>−</button>
+              <span style={{ margin: "0 10px" }}>{cantidades[producto.id] || 1}</span>
+              <button onClick={() => cambiarCantidad(producto.id, "incrementar")}>+</button>
+            </div>
+            <button onClick={() => agregarAlCarrito(producto)} style={{ marginLeft: 10 }}>
+              Agregar
+            </button>
+          </li>
         ))}
       </ul>
 
-      {/* Opcional: Debug Panel */}
-      {debug && (
-        <div style={{ background: "#f8f9fa", padding: "10px", margin: "15px 0", border: "1px solid #ccc" }}>
-          <strong>🔧 Debug:</strong>
-          <p>Token presente: {debug.tokenExists ? "✅" : "❌"}</p>
-          <p>Token preview: {debug.tokenPreview}</p>
-          <p>Status HTTP: {debug.status} ({debug.responseOk ? "OK" : "ERROR"})</p>
-        </div>
-      )}
-
-      <div style={{ marginTop: "20px" }}>
-        <button
-          onClick={() => cargarProductos(false)}
-          style={{ backgroundColor: "#ffc107", color: "#000", padding: "8px 12px", borderRadius: "5px" }}
-        >
-          🧪 Probar sin token
-        </button>
-
-        <button
-          onClick={() => {
-            localStorage.removeItem("token");
-            window.location.reload();
-          }}
-          style={{ marginLeft: "10px", backgroundColor: "#dc3545", color: "#fff", padding: "8px 12px", borderRadius: "5px" }}
-        >
-          🗑️ Borrar token
-        </button>
-      </div>
+      <button onClick={() => navigate("/cart")}>Ver carrito</button>
+      <button
+        onClick={() => {
+          localStorage.removeItem("token");
+          localStorage.removeItem("email");
+          window.location.reload();
+        }}
+      >
+        Cerrar sesión
+      </button>
     </div>
   );
 };
