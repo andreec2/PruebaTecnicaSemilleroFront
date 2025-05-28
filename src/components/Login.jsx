@@ -41,37 +41,40 @@ const Login = () => {
   return (
     <div className="page-container">
       <div className="login-container">
-        <h2>Iniciar Sesión</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="username"
-            placeholder="Usuario"
-            value={credentials.username}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Contraseña"
-            value={credentials.password}
-            onChange={handleChange}
-            required
-          />
-          <button type="submit">Entrar</button>
-        </form>
-        {error && <p className="error-msg">{error}</p>}
-        <p>
-          ¿No tienes cuenta? <Link to="/signup">Crea una</Link>
-        </p>
+        <div className="login-card">
+          <h2>Iniciar Sesión</h2>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              name="username"
+              placeholder="Usuario"
+              value={credentials.username}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Contraseña"
+              value={credentials.password}
+              onChange={handleChange}
+              required
+            />
+            <button type="submit">Entrar</button>
+          </form>
+          {error && <p className="error-msg">{error}</p>}
+          <p>
+            ¿No tienes cuenta? <Link to="/signup">Crea una</Link>
+          </p>
+        </div>
       </div>
-      <div
-        className="image-container"
-        style={{ backgroundImage: `url(${null})` }}
-      ></div>
+  
+      <div className="image-container">
+        <img src={loginImage} alt="loginImage" />
+      </div>
     </div>
   );
+  
 };
 
 export default Login;

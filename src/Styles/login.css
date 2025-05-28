@@ -7,6 +7,7 @@ body, html {
 .page-container {
   display: flex;
   height: 100vh;
+  width: 100vw;
 }
 
 .login-container {
@@ -16,7 +17,7 @@ body, html {
   justify-content: center;
   align-items: center;
   padding: 40px;
-  background-color: #1C1C1E;
+  background-color: #3a3a3a;
 }
 
 .login-container h2 {
@@ -42,7 +43,7 @@ body, html {
 
 .login-container button {
   padding: 10px;
-  background-color: #007AFF;
+  background-color: #007bff;
   color: white;
   font-size: 16px;
   border: none;
@@ -55,7 +56,7 @@ body, html {
 }
 
 .login-container .error-msg {
-  color: #5AC8FA;
+  color: #f34646;
   margin-top: 10px;
 }
 
@@ -75,6 +76,34 @@ body, html {
 
 .image-container {
   flex: 1;
-  background-size: cover;
-  background-position: center;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
 }
+
+.image-container img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.login-card {
+  background-color: #2c2c2e; /* un gris oscuro elegante */
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-card h2 {
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 //import signupImage from "../assets/signup.png"; // ajusta la ruta si es necesario
 import "../Styles/signup.css";
+import singup from "../assets/singup.jpeg";
+import aaaa from "../assets/aaaa.png";
 
 const Signup = () => {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
@@ -38,6 +40,7 @@ const Signup = () => {
   return (
     <div className="page-container">
       <div className="signup-container">
+        <div className="login-card">
         <h2>Crear Cuenta</h2>
         <form onSubmit={handleSubmit}>
           <input
@@ -67,11 +70,11 @@ const Signup = () => {
         <p>
           ¿Ya tienes cuenta? <Link to="/">Inicia sesión</Link>
         </p>
+        </div>
       </div>
-      <div
-        className="image-container"
-        style={{ backgroundImage: `url(${null})` }}
-      ></div>
+      <div className="image-container">
+        <img src={aaaa} alt="singup" />
+      </div>
     </div>
   );
 };
