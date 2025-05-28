@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [productos, setProductos] = useState([]);
-  const [cantidades, setCantidades] = useState({});
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [cantidades, setCantidades] = useState({});
   const navigate = useNavigate();
 
   const cargarProductos = async () => {
@@ -32,13 +32,12 @@ const Home = () => {
       const data = await response.json();
       setProductos(data);
 
-      // Inicializar cantidades en 1 para todos los productos
+      // Inicializar cantidades en 1 para cada producto
       const cantidadesIniciales = {};
-      data.forEach((p) => {
-        cantidadesIniciales[p.id] = 1;
+      data.forEach((prod) => {
+        cantidadesIniciales[prod.id] = 1;
       });
       setCantidades(cantidadesIniciales);
-
     } catch (err) {
       setError(err.message);
     } finally {
@@ -50,15 +49,11 @@ const Home = () => {
     cargarProductos();
   }, []);
 
-  const cambiarCantidad = (id, operacion) => {
-    setCantidades((prev) => {
-      const actual = prev[id] || 1;
-      const nuevaCantidad = operacion === "incrementar" ? actual + 1 : Math.max(1, actual - 1);
-      return {
-        ...prev,
-        [id]: nuevaCantidad,
-      };
-    });
+  const cambiarCantidad = (id, delta) => {
+    setCantidades((prev) => ({
+      ...prev,
+      [id]: Math.max(1, (prev[id] || 1) + delta),
+    }));
   };
 
   const agregarAlCarrito = async (producto) => {
@@ -68,8 +63,6 @@ const Home = () => {
 
       if (!token || !email) throw new Error("Usuario no autenticado");
 
-      const cantidad = cantidades[producto.id] || 1;
-
       const response = await fetch(`http://localhost:8080/api/cart/${email}/add`, {
         method: "POST",
         headers: {
@@ -78,7 +71,7 @@ const Home = () => {
         },
         body: JSON.stringify({
           productId: producto.id,
-          cantidad,
+          cantidad: cantidades[producto.id] || 1,
         }),
       });
 
@@ -95,29 +88,29 @@ const Home = () => {
 
   return (
     <div>
-      <h2>Tienda</h2>
+      <h2>Bienvenido a la tienda</h2>
 
       {loading && <p>Cargando productos...</p>}
-      {error && <p>{error}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
       {!loading && !error && productos.length === 0 && <p>No hay productos.</p>}
 
       <ul>
         {productos.map((producto) => (
-          <li key={producto.id}>
-            {producto.nombre} - ${producto.precio}
-            <div style={{ display: "inline-flex", alignItems: "center", marginLeft: 10 }}>
-              <button onClick={() => cambiarCantidad(producto.id, "disminuir")}>−</button>
+          <li key={producto.id} style={{ marginBottom: "15px" }}>
+            <strong>{producto.nombre}</strong> - ${producto.precio.toFixed(2)}
+            <div>
+              <button onClick={() => cambiarCantidad(producto.id, -1)}>-</button>
               <span style={{ margin: "0 10px" }}>{cantidades[producto.id] || 1}</span>
-              <button onClick={() => cambiarCantidad(producto.id, "incrementar")}>+</button>
+              <button onClick={() => cambiarCantidad(producto.id, 1)}>+</button>
             </div>
-            <button onClick={() => agregarAlCarrito(producto)} style={{ marginLeft: 10 }}>
-              Agregar
-            </button>
+            <button onClick={() => agregarAlCarrito(producto)}>Agregar al carrito</button>
           </li>
         ))}
       </ul>
 
-      <button onClick={() => navigate("/cart")}>Ver carrito</button>
+      <hr />
+      <button onClick={() => navigate("/cart")}>🛒 Ver carrito</button>
+      <button onClick={() => navigate("/orders")}>📜 Ver mis pedidos</button>
       <button
         onClick={() => {
           localStorage.removeItem("token");
@@ -125,7 +118,7 @@ const Home = () => {
           window.location.reload();
         }}
       >
-        Cerrar sesión
+        🔐 Cerrar sesión
       </button>
     </div>
   );

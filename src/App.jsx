@@ -4,6 +4,7 @@ import Signup from "./components/Signup";
 import Home from "./components/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CartPage from "./components/Cart";
+import OrdersPage from "./components/OrdersPage"; 
 
 function App() {
   return (
@@ -27,10 +28,17 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <OrdersPage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );
 }
 
 export default App;
-

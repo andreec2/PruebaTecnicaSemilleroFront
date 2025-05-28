@@ -22,7 +22,6 @@ const CartPage = () => {
 
       if (!res.ok) {
         const text = await res.text();
-        console.log(res + " Este es el carrito de compras hasta el momento")
         throw new Error(`Error al cargar el carrito: ${text}`);
       }
 
@@ -57,6 +56,57 @@ const CartPage = () => {
     }
   };
 
+  const eliminarProducto = async (productId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const email = localStorage.getItem("email");
+
+      if (!token || !email) throw new Error("No autenticado");
+
+      const res = await fetch(`http://localhost:8080/api/cart/${email}/remove/${productId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`Error al eliminar producto: ${text}`);
+      }
+
+      await fetchCarrito();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const pagar = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    const email = localStorage.getItem("email");
+
+    if (!token || !email) throw new Error("No autenticado");
+
+    const res = await fetch(`http://localhost:8080/api/cart/${email}/checkout`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const text = await res.text();
+
+    if (!res.ok) throw new Error(text);
+
+    alert("✅ " + text);
+    await fetchCarrito();
+  } catch (err) {
+    alert("❌ " + err.message);
+  }
+};
+
+
   useEffect(() => {
     fetchCarrito();
   }, []);
@@ -73,6 +123,20 @@ const CartPage = () => {
         {carrito.items.map((item, idx) => (
           <li key={idx}>
             {item.nombre} - {item.cantidad} unidad(es) - ${item.precioUnitario.toFixed(2)} c/u
+            <button
+              onClick={() => eliminarProducto(item.productId)}
+              style={{
+                marginLeft: "10px",
+                backgroundColor: "#dc3545",
+                color: "#fff",
+                border: "none",
+                padding: "5px 10px",
+                borderRadius: "4px",
+                cursor: "pointer",
+              }}
+            >
+              🗑 Eliminar
+            </button>
           </li>
         ))}
       </ul>
@@ -91,6 +155,23 @@ const CartPage = () => {
       >
         🧹 Vaciar carrito
       </button>
+
+      <button
+            onClick={pagar}
+            style={{
+              marginTop: "10px",
+              backgroundColor: "#28a745",
+              color: "#fff",
+              padding: "10px 15px",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+              marginLeft: "10px"
+            }}
+          >
+            💳 Pagar ahora
+    </button>
+
     </div>
   );
 };
